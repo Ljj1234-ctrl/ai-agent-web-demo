@@ -1,83 +1,73 @@
-# AI Agent 助手（Web Demo）
+# React + TypeScript + Vite
 
-基于 **Vite + React + TypeScript** 实现的对话式助手 Web 前端 Demo，支持消息流展示、输入区、会话列表与简单配置面板，用于练习前端工程化与对话式界面设计，以及 Coze 能力的前端接入方式。
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-界面结构：左侧为会话列表与场景选择，中间为聊天区域（消息列表 + 输入框），右侧为基础配置面板及错误提示。  
-默认使用前端 Mock 模拟接口返回；配置 Coze Token 后，可直接调用真实 Coze Chat 接口。
+Currently, two official plugins are available:
 
----
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## 功能特性
+## React Compiler
 
-- **会话管理**
-  - 支持多会话：新建会话 / 切换会话
-  - 根据首条消息自动生成简易标题
-  - 左侧列表展示最近一条消息预览
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-- **多场景 Demo**
-  - 问答 Demo：通用问答
-  - 知识检索 Demo：模拟知识库问答
-  - 工具调用 Demo：偏工具编排 / 步骤型回答
-  - 场景通过顶部 Chip 切换，可独立新建会话
+## Expanding the ESLint configuration
 
-- **消息展示**
-  - 用户消息气泡（右侧）
-  - 助手回复消息气泡（左侧）
-  - 错误消息气泡（请求失败时插入，并带错误详情）
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-- **消息发送**
-  - 输入框 + 发送按钮
-  - Enter 发送，Shift+Enter 换行
-  - 发送中禁用输入与按钮，并展示 Loading 动效
-  - 失败后在对话中插入错误提示，同时在右侧配置面板展示最近错误
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-- **简单配置**
-  - 右侧配置面板支持调节 `temperature` 与 `top_p`
-  - 当前参数主要用于演示前端表单与状态管理，后续可扩展更多模型参数 / 系统提示词等
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-- **异常兜底**
-  - 接口异常时展示友好错误提示
-  - 空对话时展示引导文案，提示如何开始聊天和切换 Demo 场景
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
----
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-## 技术栈
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-- 构建工具：Vite
-- 前端框架：React + TypeScript
-- 状态管理：函数组件 + `useState` / `useMemo` / `useCallback`
-- 接口封装：原生 `fetch` + 简单错误封装
-- 样式：原生 CSS（Grid + Flex 布局），适配明暗主题
-
----
-
-## 目录结构（简化版）
-
-```text
-aiagent-web-demo/
-  package.json
-  tsconfig.json
-  vite.config.ts
-
-  src/
-    main.tsx
-    App.tsx
-
-    components/
-      ChatLayout.tsx
-      ConversationList.tsx
-      MessageList.tsx
-      MessageCard.tsx
-      MessageInput.tsx
-      ConfigPanel.tsx
-
-    services/
-      cozeClient.ts       # Coze Chat 接口封装（无 Token 时自动 Mock）
-
-    types/
-      chat.ts             # 消息结构 / 场景 / Coze 请求响应 类型定义
-
-    scenarios.ts          # 问答 / 知识检索 / 工具调用 三个 Demo 场景配置
-
-    App.css
-    index.css
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
