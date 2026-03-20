@@ -8,6 +8,9 @@
 默认使用前端 Mock 模拟接口返回；配置 Coze Token 后，可直接调用真实 Coze Chat 接口。
 
 ---
+## 预览截图
+
+![预览截图](docs/preview.png)
 
 ## 功能特性
 
